@@ -4,7 +4,6 @@ import validator from 'express-joi-validation';
 
 import UsersController from '../controllers/controller';
 
-
 const controller = new UsersController();
 const router = Router();
 const userValidator = validator.createValidator({});
