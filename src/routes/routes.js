@@ -9,20 +9,12 @@ const router = Router();
 const userValidator = validator.createValidator({});
 
 const querySchema = {
-  newUser: Joi.object({
+  userInfo: Joi.object({
     login: Joi.string().required(),
     password: Joi.string().required(),
     age: Joi.number()
       .min(4)
-      .max(100)
-      .required(),
-  }),
-  updateUser: Joi.object({
-    login: Joi.string().required(),
-    password: Joi.string().required(),
-    age: Joi.number()
-      .min(4)
-      .max(100)
+      .max(130)
       .required(),
   }),
   findUser: Joi.object({
@@ -45,7 +37,7 @@ router
   )
   .put(
     '/user/:id',
-    userValidator.query(querySchema.newUser),
+    userValidator.query(querySchema.userInfo),
     userValidator.params(querySchema.findUser),
     (req, res, next) => {
       try {
@@ -83,7 +75,7 @@ router
   )
   .post(
     '/user',
-    userValidator.query(querySchema.newUser),
+    userValidator.query(querySchema.userInfo),
     (req, res, next) => {
       const { login, password, age } = req.query;
       controller.createUser(login, password, age);
@@ -93,5 +85,6 @@ router
       res.send('post request successful');
     },
   );
+
 
 export default router;
