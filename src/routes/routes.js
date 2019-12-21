@@ -84,7 +84,16 @@ router
     (req, res, next) => {
       res.send('post request successful');
     },
-  );
+  )
+  .get('/search/:substring', (req, res, next) => {
+    const { substring } = req.params;
+    const { limit } = req.query;
+    const suggestedUsers = controller.getAutoSuggestUsers(substring, limit);
+    if (!suggestedUsers.length) {
+      res.send('No users match the query');
+    }
 
+    res.json(`Users: ${suggestedUsers.length}`);
+  });
 
 export default router;

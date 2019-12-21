@@ -39,6 +39,15 @@ class UsersController {
 
     return currentUser;
   }
+
+  getAutoSuggestUsers(loginSubstring, limit) {
+    const regex = RegExp(`^${loginSubstring}*`, 'i');
+    const userSuggestions = this.users.filter((user) => regex.test(user.login));
+    if (limit) {
+      return userSuggestions.slice(0, limit);
+    }
+    return userSuggestions;
+  }
 }
 
 export default UsersController;
