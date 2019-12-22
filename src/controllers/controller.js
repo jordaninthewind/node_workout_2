@@ -11,41 +11,50 @@ class UsersController {
     return newUser;
   }
 
-  getUser(id) {
-    return this.checkUserExists(id);
-  }
-
   showAllUsers() {
     return this.users;
   }
 
   updateUser(id, login, password, age) {
-    const currentUser = this.checkUserExists(id);
-    currentUser.update(login, password, age);
-    return currentUser;
+    const currentUser = this.getUser(id);
+    if (currentUser) {
+      currentUser.update(login, password, age);
+      return currentUser;
+    }
+
+    return false;
   }
 
   deleteUser(id) {
-    const currentUser = this.checkUserExists(id);
-    currentUser.delete();
-    return true;
+    const currentUser = this.getUser(id);
+    if (currentUser) {
+      currentUser.delete();
+      return true;
+    }
+    return false;
   }
 
-  checkUserExists(id) {
+  getUser(id) {
     const currentUser = this.users.find((user) => user.id === id);
     if (!currentUser) {
-      throw new Error('user not found');
+      return false;
     }
 
     return currentUser;
   }
 
   getAutoSuggestUsers(loginSubstring, limit) {
-    const regex = RegExp(`^${loginSubstring}*`, 'i');
-    const userSuggestions = this.users.filter((user) => regex.test(user.login));
+    const regex = RegExp(`^${loginSubstring}`, 'i');
+    const userSuggestions = this.users.filter((user) => {
+      if (regex.test(user.login)) {
+        return user;
+      }
+    });
+
     if (limit) {
       return userSuggestions.slice(0, limit);
     }
+
     return userSuggestions;
   }
 }
