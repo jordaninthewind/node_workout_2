@@ -10,19 +10,19 @@ To run the repo, clone locally. Install all dependencies using 'npm install'. Ru
 ## Endpoints
 The repo is RESTful and follows standard RESTful syntax for CRUD operations.
 
-The endpoints are as follows:
+### The endpoints are as follows:
 
-GET /users
+##### GET /users
     - Will return all user instances
-PUT /users/:id
+##### PUT /users/:id
     - Will update user by internal ID
     - Requires 'login', 'password', and 'age' as query strings
-DELETE /users/:id
+##### DELETE /users/:id
     - Will delete user with the param :id
-GET /users/:id
+##### GET /users/:id
     - Will return the user with the param :id
-POST /users
+##### POST /users
     - Will create a new user
     - Requires 'login', 'password', and 'age' as query strings
-GET /search/:substring?limit={desired number of returned users}
+##### GET /search/:substring?limit={desired number of returned users}
     - Returns users that match the :substring as a regex
