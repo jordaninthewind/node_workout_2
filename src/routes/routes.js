@@ -24,76 +24,69 @@ const querySchema = {
 
 router
   .get(
-    '/user/:id',
+    '/users/:id',
     userValidator.params(querySchema.findUser),
     (req, res, next) => {
       const user = controller.getUser(req.params.id);
-      console.log(user);
-      next();
-    },
-    (req, res, next) => {
-      res.send('get request successful');
+
+      if (user) {
+        res.send(user);
+      }
+
+      res.status(400).send('A user with this ID was not found.');
     },
   )
   .put(
-    '/user/:id',
+    '/users/:id',
     userValidator.query(querySchema.userInfo),
     userValidator.params(querySchema.findUser),
     (req, res, next) => {
-      try {
-        const { login, password, age } = req.query;
-        const { id } = req.params;
-        const updatedUser = controller.updateUser(id, login, password, age);
-        console.log(updatedUser);
+      const { login, password, age } = req.query;
+      const { id } = req.params;
+      const updatedUser = controller.updateUser(id, login, password, age);
+      if (updatedUser) {
         res.send(`${updatedUser.login} updated successfully.`);
-      } catch (error) {
-        res.send('the user was not found.');
-        next(error);
       }
+
+      res.status(404).send('User was not found to update.');
     },
   )
-  .delete(
-    '/user/:id',
-    (req, res, next) => {
-      controller.deleteUser(req.params.id);
-      next();
-    },
-    (req, res, next) => {
-      res.send('delete request successful');
-    },
-  )
-  .get(
-    '/user',
-    (req, res, next) => {
-      const users = controller.showAllUsers();
-      console.log(users);
-      next();
-    },
-    (req, res, next) => {
-      res.send('check the console.');
-    },
-  )
+  .delete('/users/:id', (req, res, next) => {
+    if (controller.deleteUser(req.params.id)) {
+      res.send('User deleted successfully.');
+    }
+    res.status(404).send('User not found to delete.');
+  })
+  .get('/users', (req, res, next) => {
+    const users = controller.showAllUsers();
+    if (users.length > 0) {
+      res.send(users);
+    }
+
+    res.status(400).send('No users found.');
+  })
   .post(
-    '/user',
+    '/users',
     userValidator.query(querySchema.userInfo),
     (req, res, next) => {
       const { login, password, age } = req.query;
-      controller.createUser(login, password, age);
-      next();
-    },
-    (req, res, next) => {
-      res.send('post request successful');
+      if (controller.createUser(login, password, age)) {
+        res.send('User created.');
+      }
+
+      res.status(500).send('Request cannot be completed at this time.');
     },
   )
-  .get('/search/:substring', (req, res, next) => {
-    const { substring } = req.params;
-    const { limit } = req.query;
+  .get('/search', (req, res, next) => {
+    const { substring, limit } = req.query;
     const suggestedUsers = controller.getAutoSuggestUsers(substring, limit);
+
     if (!suggestedUsers.length) {
-      res.send('No users match the query');
+      res.status(404).send('No users match the query');
+      return;
     }
 
-    res.json(`Users: ${suggestedUsers.length}`);
+    res.send(suggestedUsers);
   });
 
 export default router;
