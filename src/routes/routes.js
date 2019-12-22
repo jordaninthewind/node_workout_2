@@ -26,11 +26,12 @@ router
   .get(
     '/users/:id',
     userValidator.params(querySchema.findUser),
-    (req, res, next) => {
+    (req, res) => {
       const user = controller.getUser(req.params.id);
 
       if (user) {
         res.send(user);
+        return;
       }
 
       res.status(400).send('A user with this ID was not found.');
@@ -40,27 +41,30 @@ router
     '/users/:id',
     userValidator.query(querySchema.userInfo),
     userValidator.params(querySchema.findUser),
-    (req, res, next) => {
-      const { login, password, age } = req.query;
+    (req, res) => {
       const { id } = req.params;
-      const updatedUser = controller.updateUser(id, login, password, age);
-      if (updatedUser) {
-        res.send(`${updatedUser.login} updated successfully.`);
+      const { login, password, age } = req.query;
+      //   const updatedUser = ;
+      if (controller.updateUser(id, login, password, age)) {
+        res.send(`${login} updated successfully.`);
+        return;
       }
 
       res.status(404).send('User was not found to update.');
     },
   )
-  .delete('/users/:id', (req, res, next) => {
+  .delete('/users/:id', (req, res) => {
     if (controller.deleteUser(req.params.id)) {
       res.send('User deleted successfully.');
+      return;
     }
     res.status(404).send('User not found to delete.');
   })
-  .get('/users', (req, res, next) => {
+  .get('/users', (req, res) => {
     const users = controller.showAllUsers();
     if (users.length > 0) {
       res.send(users);
+      return;
     }
 
     res.status(400).send('No users found.');
@@ -68,16 +72,18 @@ router
   .post(
     '/users',
     userValidator.query(querySchema.userInfo),
-    (req, res, next) => {
+    (req, res) => {
       const { login, password, age } = req.query;
       if (controller.createUser(login, password, age)) {
         res.send('User created.');
+        return;
       }
 
       res.status(500).send('Request cannot be completed at this time.');
     },
   )
-  .get('/search', (req, res, next) => {
+
+  .get('/search', (req, res) => {
     const { substring, limit } = req.query;
     const suggestedUsers = controller.getAutoSuggestUsers(substring, limit);
 
@@ -85,7 +91,6 @@ router
       res.status(404).send('No users match the query');
       return;
     }
-
     res.send(suggestedUsers);
   });
 
