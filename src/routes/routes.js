@@ -25,7 +25,6 @@ const querySchema = {
 router
   .get(
     '/users/:id',
-    userValidator.params(querySchema.findUser),
     (req, res) => {
       const user = controller.getUser(req.params.id);
 
@@ -39,12 +38,11 @@ router
   )
   .put(
     '/users/:id',
-    userValidator.query(querySchema.userInfo),
-    userValidator.params(querySchema.findUser),
+    userValidator.body(querySchema.userInfo),
     (req, res) => {
       const { id } = req.params;
-      const { login, password, age } = req.query;
-      //   const updatedUser = ;
+      const { login, password, age } = req.body;
+
       if (controller.updateUser(id, login, password, age)) {
         res.send(`${login} updated successfully.`);
         return;
@@ -71,9 +69,9 @@ router
   })
   .post(
     '/users',
-    userValidator.query(querySchema.userInfo),
+    userValidator.body(querySchema.userInfo),
     (req, res) => {
-      const { login, password, age } = req.query;
+      const { login, password, age } = req.body;
       if (controller.createUser(login, password, age)) {
         res.send('User created.');
         return;
@@ -84,11 +82,11 @@ router
   )
 
   .get('/search', (req, res) => {
-    const { substring, limit } = req.query;
+    const { substring, limit } = req.body;
     const suggestedUsers = controller.getAutoSuggestUsers(substring, limit);
 
     if (!suggestedUsers.length) {
-      res.status(404).send('No users match the query');
+      res.status(404).send('No users match the request.');
       return;
     }
     res.send(suggestedUsers);
