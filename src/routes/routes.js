@@ -17,9 +17,6 @@ const querySchema = {
       .max(130)
       .required(),
   }),
-  findUser: Joi.object({
-    id: Joi.string().required(),
-  }),
 };
 
 router
@@ -75,7 +72,7 @@ router
       const { login, password, age } = req.body;
       const user = controller.createUser(login, password, age);
       if (user) {
-        res.json({ message: 'User created.', data: user });
+        res.json({ message: 'User created.', data: user.id });
         return;
       }
 
