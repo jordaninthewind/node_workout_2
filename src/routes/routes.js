@@ -6,18 +6,16 @@ import UsersController from '../controllers/controller';
 
 const controller = new UsersController();
 const router = Router();
-const userValidator = validator.createValidator({});
+const userValidator = validator.createValidator({ passError: true });
 
-const querySchema = {
-  userInfo: Joi.object({
-    login: Joi.string().required(),
-    password: Joi.string().required(),
-    age: Joi.number()
-      .min(4)
-      .max(130)
-      .required(),
-  }),
-};
+const querySchema = Joi.object({
+  login: Joi.string().required(),
+  password: Joi.string().required(),
+  age: Joi.number()
+    .min(4)
+    .max(130)
+    .required(),
+});
 
 router
   .get(
@@ -35,7 +33,7 @@ router
   )
   .put(
     '/users/:id',
-    userValidator.body(querySchema.userInfo),
+    userValidator.body(querySchema),
     (req, res) => {
       const { id } = req.params;
       const { login, password, age } = req.body;
@@ -67,7 +65,7 @@ router
   })
   .post(
     '/users',
-    userValidator.body(querySchema.userInfo),
+    userValidator.body(querySchema),
     (req, res) => {
       const { login, password, age } = req.body;
       const user = controller.createUser(login, password, age);
