@@ -87,7 +87,8 @@ router
   )
 
   .get('/search', (req, res) => {
-    const suggestedUsers = controller.getAutoSuggestUsers(req.params.substring, req.params.limit);
+    const { substring, limit } = req.query;
+    const suggestedUsers = controller.getAutoSuggestUsers(substring, limit);
 
     if (suggestedUsers.length) {
       res.json(suggestedUsers);
