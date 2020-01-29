@@ -13,10 +13,10 @@ class User {
     this.isDeleted = true;
   }
 
-  update(login, password, age) {
-    this.login = login;
-    this.password = password;
-    this.age = age;
+  update(args) {
+    Object.keys(args).forEach((key) => {
+      this[key] = args[key];
+    });
   }
 }
 

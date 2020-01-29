@@ -15,10 +15,10 @@ class UsersController {
     return this.users;
   }
 
-  updateUser(id, login, password, age) {
+  updateUser(id, query) {
     const currentUser = this.getUser(id);
     if (currentUser) {
-      currentUser.update(login, password, age);
+      currentUser.update(query);
       return currentUser;
     }
 

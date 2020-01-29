@@ -8,14 +8,23 @@ const controller = new UsersController();
 const router = Router();
 const userValidator = validator.createValidator({ passError: true });
 
-const querySchema = Joi.object({
-  login: Joi.string().required(),
-  password: Joi.string().required(),
-  age: Joi.number()
-    .min(4)
-    .max(130)
-    .required(),
-});
+const querySchema = {
+  newUser: Joi.object({
+    login: Joi.string().required(),
+    password: Joi.string().required(),
+    age: Joi.number()
+      .min(4)
+      .max(130)
+      .required(),
+  }),
+  updateUser: Joi.object({
+    login: Joi.string(),
+    password: Joi.string(),
+    age: Joi.number()
+      .min(4)
+      .max(130),
+  }),
+};
 
 router
   .get(
@@ -24,7 +33,7 @@ router
       const user = controller.getUser(req.params.id);
 
       if (user) {
-        res.json({ data: user });
+        res.json(user);
         return;
       }
 
@@ -33,13 +42,12 @@ router
   )
   .put(
     '/users/:id',
-    userValidator.body(querySchema),
+    userValidator.body(querySchema.updateUser),
     (req, res) => {
       const { id } = req.params;
-      const { login, password, age } = req.body;
-
-      if (controller.updateUser(id, login, password, age)) {
-        res.json({ message: `${login} updated successfully.` });
+      const user = controller.updateUser(id, req.body);
+      if (user) {
+        res.json({ message: `${user.login} updated successfully.` });
         return;
       }
 
@@ -57,7 +65,7 @@ router
   .get('/users', (req, res) => {
     const users = controller.showAllUsers();
     if (users.length > 0) {
-      res.json({ data: users });
+      res.json(users);
       return;
     }
 
@@ -65,12 +73,12 @@ router
   })
   .post(
     '/users',
-    userValidator.body(querySchema),
+    userValidator.body(querySchema.newUser),
     (req, res) => {
       const { login, password, age } = req.body;
       const user = controller.createUser(login, password, age);
       if (user) {
-        res.json({ message: 'User created.', data: user.id });
+        res.json({ message: 'User created.', id: user.id });
         return;
       }
 
@@ -79,10 +87,10 @@ router
   )
 
   .get('/search', (req, res) => {
-    const suggestedUsers = controller.getAutoSuggestUsers(req.body.substring, req.body.limit);
+    const suggestedUsers = controller.getAutoSuggestUsers(req.params.substring, req.params.limit);
 
     if (suggestedUsers.length) {
-      res.json({ data: suggestedUsers });
+      res.json(suggestedUsers);
       return;
     }
     res.status(404).json({ message: 'No users match the request.' });
