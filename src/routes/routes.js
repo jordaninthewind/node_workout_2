@@ -45,9 +45,8 @@ router
     userValidator.body(querySchema.updateUser),
     async (req, res) => {
       const user = await userController.updateUser(req.params.id, req.body);
-      console.log(user);
       if (user) {
-        res.json({ message: `${user.login} updated successfully.` });
+        res.json({ message: 'User updated successfully.' });
         return;
       }
 
