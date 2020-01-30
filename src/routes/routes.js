@@ -2,9 +2,9 @@ import { Router } from 'express';
 import Joi from 'joi';
 import validator from 'express-joi-validation';
 
-import UsersController from '../controllers/controller';
+import UsersService from '../services/usersService';
 
-const userController = new UsersController();
+const usersService = new UsersService();
 const router = Router();
 const userValidator = validator.createValidator({ passError: true });
 
@@ -30,7 +30,7 @@ router
   .get(
     '/users/:id',
     async (req, res) => {
-      const user = await userController.getUser(req.params.id);
+      const user = await usersService.getUser(req.params.id);
 
       if (user) {
         res.json(user);
@@ -44,7 +44,7 @@ router
     '/users/:id',
     userValidator.body(querySchema.updateUser),
     async (req, res) => {
-      const user = await userController.updateUser(req.params.id, req.body);
+      const user = await usersService.updateUser(req.params.id, req.body);
       if (user) {
         res.json({ message: 'User updated successfully.' });
         return;
@@ -54,7 +54,7 @@ router
     },
   )
   .delete('/users/:id', async (req, res) => {
-    const deletedUser = await userController.deleteUser(req.params.id);
+    const deletedUser = await usersService.deleteUser(req.params.id);
     if (deletedUser) {
       res.json({ message: 'User deleted successfully.' });
       return;
@@ -63,7 +63,7 @@ router
     res.status(404).json({ message: 'User not found to delete.' });
   })
   .get('/users', async (req, res) => {
-    const users = await userController.getAllUsers();
+    const users = await usersService.getAllUsers();
 
     if (users.length > 0) {
       res.json(users);
@@ -77,7 +77,7 @@ router
     userValidator.body(querySchema.newUser),
     async (req, res) => {
       const { login, password, age } = req.body;
-      const user = await userController.createUser(login, password, age);
+      const user = await usersService.createUser(login, password, age);
       if (user) {
         res.json({ message: 'User created.', id: user.id });
         return;
@@ -89,7 +89,7 @@ router
 
   .get('/search', async (req, res) => {
     const { substring, limit } = req.query;
-    const suggestedUsers = await userController.getAutoSuggestUsers(substring, limit);
+    const suggestedUsers = await usersService.getAutoSuggestUsers(substring, limit);
 
     if (suggestedUsers.length) {
       res.json(suggestedUsers);

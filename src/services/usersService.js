@@ -1,14 +1,14 @@
 // import User from '../models/model';
 import { User } from '../database/models';
 
-class UsersController {
+class UsersService {
   createUser(login, password, age) {
     this.user = User.create({ login, password, age });
     return this.user;
   }
 
   getAllUsers() {
-    return User.findAll();
+    return User.findAll({ order: [['id', 'DESC']] });
   }
 
   updateUser(id, query) {
@@ -51,4 +51,4 @@ class UsersController {
   }
 }
 
-export default UsersController;
+export default UsersService;
