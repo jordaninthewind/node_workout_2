@@ -6,6 +6,20 @@ module.exports = {
     password: 'default',
     createdAt: new Date(),
     updatedAt: new Date(),
+  },
+  {
+    login: 'Jordan',
+    age: 35,
+    password: 'default',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    login: 'Anna',
+    age: 30,
+    password: 'default',
+    createdAt: new Date(),
+    updatedAt: new Date(),
   }], {}),
   down: (queryInterface, Sequelize) => queryInterface.bulkDelete('People', null, {}),
 };
