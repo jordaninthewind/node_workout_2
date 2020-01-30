@@ -1,7 +1,7 @@
 {
   "name": "module-2",
   "version": "1.0.0",
-  "description": "Training module 2 on Node.js Program",
+  "description": "Training module 3 on Node.js Program",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,8 +14,8 @@
       "@babel/preset-env"
     ]
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Jordan Kline",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
