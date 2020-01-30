@@ -1,46 +1,40 @@
-import User from '../models/model';
+// import User from '../models/model';
+import { User } from '../database/models';
 
 class UsersController {
-  constructor() {
-    this.users = [];
-  }
-
   createUser(login, password, age) {
-    const newUser = new User(login, password, age);
-    this.users.push(newUser);
-    return newUser;
+    this.user = User.create({ login, password, age });
+    return this.user;
   }
 
-  showAllUsers() {
-    return this.users;
+  getAllUsers() {
+    return User.findAll();
   }
 
-  updateUser(id, query) {
+  async updateUser(id, query) {
     const currentUser = this.getUser(id);
     if (currentUser) {
-      currentUser.update(query);
-      return currentUser;
+      const updatedUser = await User.update(query, { where: { id } });
+      return updatedUser;
     }
-
     return false;
   }
 
   deleteUser(id) {
     const currentUser = this.getUser(id);
     if (currentUser) {
-      currentUser.delete();
-      return true;
+      return User.update({ isDeleted: true }, { where: { id } });
     }
     return false;
   }
 
-  getUser(id) {
-    const currentUser = this.users.find((user) => user.id === id);
-    if (!currentUser) {
-      return false;
+  async getUser(id) {
+    this.currentUser = await User.findAll({ where: { id } });
+    if (this.currentUser) {
+      return this.currentUser;
     }
 
-    return currentUser;
+    return false;
   }
 
   getAutoSuggestUsers(loginSubstring, limit) {
