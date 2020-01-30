@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "task:2.1": "nodemon ./src/index.js --exec babel-node -e js",
-    "start": "nodemon ./src/index.js --exec babel-node -e js"
+    "start": "npm run db:up && npm run task:3.1",
+    "db:up": "sequelize-cli db:migrate && sequelize-cli db:seed:all",
+    "task:3.1": "nodemon ./src/index.js --exec babel-node -e js"
   },
   "babel": {
     "presets": [
