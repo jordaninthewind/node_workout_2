@@ -11,11 +11,10 @@ class UsersController {
     return User.findAll();
   }
 
-  async updateUser(id, query) {
+  updateUser(id, query) {
     const currentUser = this.getUser(id);
     if (currentUser) {
-      const updatedUser = await User.update(query, { where: { id } });
-      return updatedUser;
+      return User.update(query, { where: { id } });
     }
     return false;
   }
@@ -40,7 +39,9 @@ class UsersController {
   getAutoSuggestUsers(loginSubstring, limit) {
     const regex = RegExp(`^${loginSubstring}`, 'i');
 
-    const userSuggestions = this.users.filter((user) => regex.test(user.login));
+    const users = this.getAllUsers();
+
+    const userSuggestions = users.filter((user) => regex.test(user.login));
 
     if (limit) {
       return userSuggestions.slice(0, limit);
