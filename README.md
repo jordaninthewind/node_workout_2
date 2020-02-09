@@ -1,11 +1,21 @@
-## EPAM Node.js Task 2
+## EPAM Node.js Task 3
 
-This application is a backend, in memory user generator.
+This application is a backend CRUD server application that allows for users to be stored in a database.
 
-Using Postman or another request generator, a user can communicate with endpoints to create users with Login, Password (stored in plaintext), and age. Each user is assigned a unique identifier when created.
+Using Postman or another request generator, a user can communicate with endpoints to create users with Login, Password (stored in plaintext), and age. Each user is assigned a unique, serial identifier when created.
 
 ### Getting Started
-To run the repo, clone locally. Install all dependencies using 'npm install'. Run the server by using the command 'npm run start'.
+To run the repo, clone locally. Install all dependencies using 'npm install'. 
+
+## Getting DB Initialized
+
+Create a .env file in the root of this directory and update values for database, as follows: 
+
+    DEV_DATABASE_URL='postgres://[username]:[password]@127.0.0.1:[pgport | 5432]/[database]'
+
+Ensure that you have a running instance of Postgresql.
+
+Migrate and seed the database, and run the server by using the command 'npm run start'.
 
 ## Endpoints
 The repo is RESTful and follows standard RESTful syntax for CRUD operations.
