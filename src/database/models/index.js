@@ -15,7 +15,7 @@ let sequelize;
 if (config[env].use_env_variable) {
   sequelize = new Sequelize(config[env].url);
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(config[env].database, config[env].username, config[env].password, config[env]);
 }
 
 fs
