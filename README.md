@@ -1,11 +1,21 @@
-## EPAM Node.js Task 2
+## EPAM Node.js Task 4
 
-This application is a backend, in memory user generator.
+This application is a backend CRUD server application that allows for users to be stored in a database.
 
-Using Postman or another request generator, a user can communicate with endpoints to create users with Login, Password (stored in plaintext), and age. Each user is assigned a unique identifier when created.
+Using Postman or another request generator, a user can communicate with endpoints to create users with Login, Password (stored in plaintext), and age. Each user is assigned a unique, serial identifier when created.
 
 ### Getting Started
-To run the repo, clone locally. Install all dependencies using 'npm install'. Run the server by using the command 'npm run start'.
+To run the repo, clone locally. Install all dependencies using 'npm install'. 
+
+## Getting DB Initialized
+
+Create a .env file in the root of this directory and update values for database, as follows: 
+
+    DEV_DATABASE_URL='postgres://[username]:[password]@127.0.0.1:[pgport | 5432]/[database]'
+
+Ensure that you have a running instance of Postgresql.
+
+Migrate and seed the database, and run the server by using the command 'npm run start'.
 
 ## Endpoints
 The repo is RESTful and follows standard RESTful syntax for CRUD operations.
@@ -26,3 +36,15 @@ The repo is RESTful and follows standard RESTful syntax for CRUD operations.
     - Requires 'login', 'password', and 'age' as query strings
 ##### GET /search/:substring?limit={desired number of returned users}
     - Returns users that match the :substring as a regex
+##### GET /groups
+    - Will return all group instances
+##### POST /groups
+    - Will create a new group
+    - Requires name and permissions list
+##### GET /groups/:id
+    - Will return group with param :id
+##### DELETE /groups/:id
+    - Will delete group with param :id
+##### PUT /groups/:id
+    - Will update group with param :id
+    - Requires new name and/or permissions list

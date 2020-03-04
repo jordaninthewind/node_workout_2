@@ -2,3 +2,4 @@
 /node_modules/
 /Homework 2.pdf
 /.vscode
+.env
