@@ -5,7 +5,12 @@ module.exports = (sequelize, DataTypes) => {
     permissions: DataTypes.ARRAY(DataTypes.STRING),
   }, {});
   Group.associate = function (models) {
-    // associations can be defined here
+    Group.belongsToMany(models.User, {
+      through: 'UserGroups',
+      as: 'users',
+      foreignKey: 'groupId',
+      otherKey: 'userId',
+    });
   };
   return Group;
 };

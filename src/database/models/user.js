@@ -6,7 +6,12 @@ module.exports = (sequelize, DataTypes) => {
     isDeleted: DataTypes.BOOLEAN,
   }, {});
   User.associate = function (models) {
-    // associations can be defined here
+    User.belongsToMany(models.Group, {
+      through: 'UserGroups',
+      as: 'groups',
+      foreignKey: 'userId',
+      otherKey: 'groupId',
+    });
   };
   return User;
 };
