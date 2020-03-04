@@ -1,4 +1,4 @@
-## EPAM Node.js Task 3
+## EPAM Node.js Task 4
 
 This application is a backend CRUD server application that allows for users to be stored in a database.
 
@@ -36,3 +36,15 @@ The repo is RESTful and follows standard RESTful syntax for CRUD operations.
     - Requires 'login', 'password', and 'age' as query strings
 ##### GET /search/:substring?limit={desired number of returned users}
     - Returns users that match the :substring as a regex
+##### GET /groups
+    - Will return all group instances
+##### POST /groups
+    - Will create a new group
+    - Requires name and permissions list
+##### GET /groups/:id
+    - Will return group with param :id
+##### DELETE /groups/:id
+    - Will delete group with param :id
+##### PUT /groups/:id
+    - Will update group with param :id
+    - Requires new name and/or permissions list
